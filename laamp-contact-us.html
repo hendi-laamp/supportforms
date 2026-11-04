@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact Sales | LAAMP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<!--
+  Proposed /contact-us page (mockup for Rahmat).
+  Header and footer copy the live site, with two changes: "Support" in the header, "Get support" in the footer.
+  New parts are marked NEW. Everything else matches the live page and stays as it is in Framer.
+  Links use production paths (/support, /contact-us), so they only work once published.
+-->
+<style>
+  :root {
+    --ink: #101828; --muted: #60718A; --blue: #1B5B98; --brand: #206CB5; --card: #F7F9FC;
+    --line: #EAECF0; --field-border: #D0D5DD; --placeholder: #667085;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; font-family: Inter, "Inter Placeholder", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--ink); background: #FFFFFF; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, p { margin: 0; }
+  img, svg { display: block; }
+  .container { width: 100%; max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  :focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+
+  /* Header */
+  .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: 68px; background: var(--blue); }
+  .site-header .container { height: 100%; display: flex; align-items: center; gap: 40px; }
+  .site-header :focus-visible { outline-color: #FFFFFF; }
+  .site-logo { color: #FFFFFF; flex: none; }
+  .site-logo svg { width: 116px; height: 27px; }
+  .site-nav { display: flex; align-items: center; gap: 32px; }
+  .site-nav a { display: inline-flex; align-items: center; gap: 4px; font-size: 16px; line-height: 24px; font-weight: 600;
+    color: #FFFFFF; text-decoration: none; }
+  .site-nav .chev { width: 8px; height: 8px; }
+  .site-nav .ai { position: relative; padding-right: 6px; }
+  .site-nav .ai svg { position: absolute; top: -4px; right: -6px; width: 10px; height: 10px; }
+  .site-actions { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .btn-nav { display: inline-flex; align-items: center; padding: 12px 20px; border-radius: 4px; font-size: 16px; line-height: 24px;
+    font-weight: 600; color: #FFFFFF; text-decoration: none; }
+  .btn-nav:hover { background: rgba(238, 244, 250, 0.12); }
+  .btn-nav--solid { background: rgba(238, 244, 250, 0.2); }
+  .btn-nav--solid:hover { background: rgba(238, 244, 250, 0.28); }
+  .menu-toggle { display: none; margin-left: auto; padding: 8px; border: 0; background: none; color: #FFFFFF; cursor: pointer; }
+  .menu-toggle svg { width: 24px; height: 24px; }
+  .mobile-menu { display: none; }
+  @media (max-width: 809px) {
+    .site-nav, .site-actions { display: none; }
+    .menu-toggle { display: inline-flex; }
+    .site-header.is-open .mobile-menu { display: flex; }
+    .mobile-menu { position: absolute; top: 68px; left: 0; right: 0; flex-direction: column; gap: 4px; padding: 8px 24px 24px;
+      background: var(--blue); }
+    .mobile-menu a { padding: 12px 0; font-size: 16px; line-height: 24px; font-weight: 600; color: #FFFFFF; text-decoration: none; }
+  }
+
+  /* Hero and sales form */
+  .hero { background: linear-gradient(#E8F0F7 0%, #FFFFFF 100%); padding: 160px 24px 120px; }
+  .hero__stack { max-width: 736px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+  .hero__head { text-align: center; display: flex; flex-direction: column; gap: 24px; }
+  .hero__title { font-size: 45px; line-height: 1; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); }
+  .hero__sub { font-size: 18px; line-height: 24px; font-weight: 500; color: var(--muted); }
+  @media (max-width: 809px) {
+    .hero { padding: 128px 24px 80px; }
+    .hero__title { font-size: 36px; line-height: 1.1; }
+  }
+
+  /* NEW: sales or support chooser */
+  .choose { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .choose__card { display: flex; flex-direction: column; gap: 24px; padding: 24px; background: #FFFFFF; border-radius: 12px;
+    box-shadow: 0 8px 8px -4px rgba(16, 24, 40, 0.04), 0 20px 24px -4px rgba(16, 24, 40, 0.08); }
+  @media (max-width: 639px) { .choose { grid-template-columns: 1fr; gap: 16px; } }
+
+  /* Shared card parts */
+  .icon-dot { width: 48px; height: 48px; border-radius: 1000px; background: var(--blue); color: #FFFFFF;
+    display: flex; align-items: center; justify-content: center; flex: none; }
+  .icon-dot svg { width: 23px; height: 23px; }
+  .card-title { font-size: 22px; line-height: 28px; font-weight: 600; color: var(--ink); }
+  .card-text { margin-top: 8px; font-size: 18px; line-height: 24px; font-weight: 400; color: var(--muted); }
+  .card-link { display: inline-block; margin-top: 20px; font-size: 18px; line-height: 24px; font-weight: 500; color: var(--blue);
+    text-decoration: none; }
+  .card-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  .form-card { background: #FFFFFF; border-radius: 12px; padding: 32px; scroll-margin-top: 96px;
+    box-shadow: 0 8px 8px -4px rgba(16, 24, 40, 0.04), 0 20px 24px -4px rgba(16, 24, 40, 0.08); }
+  .form { display: flex; flex-direction: column; gap: 24px; }
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .field label { font-size: 12px; line-height: 16.8px; font-weight: 600; color: var(--ink); }
+  .field input, .field select, .field textarea { width: 100%; font: 600 15px/21px Inter, "Inter Placeholder", system-ui, sans-serif;
+    color: var(--ink); background: #FFFFFF; border: 1px solid var(--field-border); border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05); }
+  .field input, .field select { height: 44px; padding: 6px 14px; }
+  .field textarea { height: 136px; padding: 12px 14px; resize: vertical; }
+  .field ::placeholder { color: var(--placeholder); opacity: 1; }
+  .field select { appearance: none; -webkit-appearance: none; color: var(--placeholder); padding-right: 36px;
+    background: #FFFFFF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='6' viewBox='0 0 8 6'%3E%3Cpath d='M0 0h8L4 6z' fill='%23101828'/%3E%3C/svg%3E") no-repeat right 14px center; }
+  .field select.has-value { color: var(--ink); }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--brand);
+    box-shadow: 0 0 0 4px rgba(32, 108, 181, 0.12); }
+  .btn-primary { width: 100%; padding: 16px; border: 0; border-radius: 4px; background: var(--brand); color: #FFFFFF;
+    font: 600 18px/21px Inter, "Inter Placeholder", system-ui, sans-serif; cursor: pointer; }
+  .btn-primary:hover { background: #1B5B98; }
+  .form-note { font-size: 15px; line-height: 21px; color: var(--muted); }
+  .form-note a { color: var(--muted); text-underline-offset: 2px; }
+  @media (max-width: 639px) { .form-card { padding: 24px; } }
+
+  /* Client logos */
+  .trusted { padding: 64px 0 40px; overflow: hidden; }
+  .trusted__label { font-size: 18px; line-height: 24px; font-weight: 500; color: var(--muted); }
+  .marquee { margin-top: 88px; overflow: hidden; }
+  .marquee__track { display: flex; align-items: center; gap: 32px; width: max-content; animation: scroll 40s linear infinite; }
+  .marquee__track img { height: 88px; width: auto; }
+  @keyframes scroll { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .marquee__track { animation: none; } }
+
+  /* FAQ */
+  .faq { background: linear-gradient(#FFFFFF 0%, #EEF4FA 35%); padding: 120px 24px; }
+  .faq__inner { max-width: 720px; margin: 0 auto; }
+  .faq__title { text-align: center; font-size: 54px; line-height: 1.1; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); }
+  .faq__sub { margin-top: 24px; text-align: center; font-size: 18px; line-height: 24px; font-weight: 500; color: var(--muted); }
+  .faq__list { margin-top: 80px; }
+  .faq__item { border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
+  .faq__item summary { list-style: none; display: flex; align-items: center; gap: 24px; padding: 20px 0; cursor: pointer;
+    font-size: 18px; line-height: 25.2px; font-weight: 600; color: var(--ink); }
+  .faq__item summary::-webkit-details-marker { display: none; }
+  .faq__item summary svg { width: 16px; height: 16px; flex: none; color: #98A2B3; transition: transform 0.2s ease; }
+  .faq__item[open] summary svg { transform: rotate(45deg); }
+  .faq__answer { padding: 0 20px 24px 40px; display: flex; flex-direction: column; gap: 24px; }
+  .faq__answer p { font-size: 18px; line-height: 24px; color: var(--muted); }
+  @media (max-width: 809px) { .faq { padding: 80px 24px; } .faq__title { font-size: 40px; } .faq__list { margin-top: 48px; } }
+
+  /* NEW: support section */
+  .support { padding: 120px 0; scroll-margin-top: 68px; }
+  .support__title { font-size: 54px; line-height: 1.1; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); }
+  .support__intro { margin-top: 24px; font-size: 18px; line-height: 24px; font-weight: 500; color: var(--muted); }
+  .support__grid { margin-top: 80px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .support__card { display: flex; flex-direction: column; gap: 64px; padding: 24px 24px 32px; background: var(--card); }
+  .support__note { margin-top: 48px; font-size: 18px; line-height: 24px; font-weight: 500; color: var(--muted); }
+  @media (max-width: 809px) {
+    .support { padding: 80px 0; }
+    .support__title { font-size: 40px; }
+    .support__grid { grid-template-columns: 1fr; margin-top: 48px; gap: 16px; }
+    .support__card { gap: 40px; }
+  }
+
+  /* Footer */
+  .site-footer { padding-top: 96px; }
+  .site-footer__top { display: grid; grid-template-columns: 1fr 232px 135px; padding-bottom: 64px; }
+  .footer-logo { color: var(--blue); }
+  .footer-logo svg { width: 116px; height: 27px; }
+  .footer-tagline { margin-top: 32px; max-width: 320px; font-size: 15px; line-height: 21px; color: var(--muted); }
+  .footer-links { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+  .footer-links a { font-size: 15px; line-height: 21px; font-weight: 600; color: var(--muted); text-decoration: none; }
+  .footer-links a:hover { color: var(--ink); }
+  .footer-apps { display: flex; flex-direction: column; gap: 16px; }
+  .app-badge { display: flex; flex-direction: column; justify-content: center; width: 135px; height: 40px; padding: 0 12px;
+    border-radius: 6px; background: #000000; color: #FFFFFF; text-decoration: none; border: 1px solid #A6A6A6; }
+  .app-badge small { font-size: 9px; line-height: 10px; }
+  .app-badge span { font-size: 16px; line-height: 18px; font-weight: 600; }
+  .site-footer__bottom { border-top: 1px solid var(--line); }
+  .site-footer__bottom .container { display: flex; align-items: center; justify-content: space-between; padding-top: 32px; padding-bottom: 32px; }
+  .copyright { font-size: 15px; line-height: 21px; color: var(--muted); }
+  .social { color: #98A2B3; }
+  .social svg { width: 24px; height: 24px; }
+  @media (max-width: 809px) {
+    .site-footer { padding-top: 64px; }
+    .site-footer__top { grid-template-columns: 1fr; gap: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header" id="site-header">
+  <div class="container">
+    <a class="site-logo" href="/" aria-label="LAAMP home">
+      <svg viewBox="0 0 116 27" fill="currentColor" aria-hidden="true"><path d="M 106.084 0.53 C 112.242 0.53 115.965 4.205 115.965 9.514 L 115.965 9.591 C 115.965 15.605 111.319 18.72 105.53 18.72 L 101.216 18.72 L 101.216 26.517 L 95.538 26.517 L 95.538 0.53 Z M 105.715 13.635 C 108.553 13.635 110.213 11.927 110.213 9.7 L 110.213 9.623 C 110.213 7.061 108.446 5.688 105.603 5.688 L 101.215 5.688 L 101.215 13.635 Z M 69.657 0.53 L 76.441 11.515 L 83.225 0.53 L 89.346 0.53 L 89.346 26.517 L 83.704 26.517 L 83.704 9.551 L 76.44 20.652 L 76.293 20.652 L 69.103 9.662 L 69.103 26.517 L 63.536 26.517 L 63.536 0.53 Z M 20.647 26.551 L 31.711 0.185 L 37.059 0.185 L 48.123 26.551 L 42.222 26.551 L 34.293 7.241 L 26.548 26.551 Z M 44.988 14.482 L 42.037 7.798 L 45.541 0 L 50.634 0 L 61.953 26.551 L 55.868 26.551 L 47.939 7.241 L 44.988 14.482 Z M -0.005 0.371 L 5.895 0.371 L 5.895 21.166 L 18.619 21.166 L 18.619 26.551 L -0.005 26.551 Z"/></svg>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/features">Explore <svg class="chev" viewBox="0 0 8 8" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M1 3l3 3 3-3"/></svg></a>
+      <a href="/blog">Blog</a>
+      <a href="/about">About us</a>
+      <a class="ai" href="/ai">AI Features <svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M5 0l1.2 3.8L10 5 6.2 6.2 5 10 3.8 6.2 0 5l3.8-1.2z"/></svg></a>
+    </nav>
+    <div class="site-actions">
+      <!-- NEW: Support link -->
+      <a class="btn-nav" href="/support">Support</a>
+      <a class="btn-nav" href="https://laamp.com.au/app">Login</a>
+      <a class="btn-nav btn-nav--solid" href="/contact-us" aria-current="page">Contact Sales</a>
+    </div>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile">
+    <a href="/features">Explore</a>
+    <a href="/blog">Blog</a>
+    <a href="/about">About us</a>
+    <a href="/ai">AI Features</a>
+    <a href="/support">Support</a>
+    <a href="https://laamp.com.au/app">Login</a>
+    <a href="/contact-us">Contact Sales</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero__stack">
+      <div class="hero__head">
+        <h1 class="hero__title">Interested in LAAMP? Let’s Chat.</h1>
+        <p class="hero__sub">Reach out and we’ll help you get started with a trial.</p>
+      </div>
+
+      <!-- NEW START: sales or support chooser -->
+      <div class="choose">
+        <div class="choose__card">
+          <span class="icon-dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
+          <div>
+            <h2 class="card-title">New to LAAMP?</h2>
+            <p class="card-text">Tell us about your sites and teams, and we’ll help you get started.</p>
+            <a class="card-link" href="#sales-form">Talk to sales</a>
+          </div>
+        </div>
+        <div class="choose__card">
+          <span class="icon-dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M14.83 9.17l4.24-4.24M4.93 19.07l4.24-4.24"/></svg></span>
+          <div>
+            <h2 class="card-title">Already using LAAMP?</h2>
+            <p class="card-text">Get help with your account, courses or the app from our support team.</p>
+            <a class="card-link" href="/support">Get support</a>
+          </div>
+        </div>
+      </div>
+      <!-- NEW END -->
+
+      <!-- Existing sales form. In Framer, give this section the ID "sales-form". Country list is shortened in this mockup. -->
+      <div class="form-card" id="sales-form">
+        <form class="form" action="#" onsubmit="return false;">
+          <div class="field"><label for="s-name">Full Name*</label><input id="s-name" type="text" placeholder="Enter your name" required></div>
+          <div class="field"><label for="s-email">Business Email*</label><input id="s-email" type="email" placeholder="Enter your email" required></div>
+          <div class="field"><label for="s-phone">Phone Number</label><input id="s-phone" type="tel" placeholder="+61 4XX XXX XXX"></div>
+          <div class="field"><label for="s-company">Company*</label><input id="s-company" type="text" placeholder="Where do you work?" required></div>
+          <div class="field"><label for="s-size">Company size</label>
+            <select id="s-size"><option value="">Select</option><option>1-99</option><option>100-999</option><option>1000-4999</option><option>5000+</option></select></div>
+          <div class="field"><label for="s-country">Country</label>
+            <select id="s-country" class="has-value"><option selected>Australia</option><option>New Zealand</option><option>USA</option><option>Canada</option><option>United Kingdom</option><option>South Africa</option><option>Indonesia</option><option>Papua New Guinea</option></select></div>
+          <div class="field"><label for="s-message">Message*</label><textarea id="s-message" placeholder="Leave us a message..." required></textarea></div>
+          <div class="field"><label for="s-source">How did you first hear about LAAMP?</label>
+            <select id="s-source"><option value="">Select</option><option>Search engine (Google, Bing, Yahoo, etc.)</option><option>AI assistant (ChatGPT, Claude, Perplexity, Gemini, etc.)</option><option>LinkedIn (post, ad, or message)</option><option>Industry event (conference, expo, site visit, etc.)</option><option>Referral (colleague, client, partner, etc.)</option><option>Article or review site (industry media, G2, Capterra, etc.)</option></select></div>
+          <button class="btn-primary" type="submit">Contact sales</button>
+          <p class="form-note">By submitting this form, you agree to LAAMP’s <a href="/support/privacy-policy">Privacy Policy</a>, and LAAMP contacting you.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="trusted" aria-label="Clients">
+    <div class="container"><p class="trusted__label">Trusted by our Global Clients</p></div>
+    <div class="marquee">
+      <div class="marquee__track">
+        <img src="https://framerusercontent.com/images/BPiWhoPxf5mO15szPGo3CL22k.png" alt="">
+        <img src="https://framerusercontent.com/images/U0aByGtvrYuEmCKlDJNeFGfzGsE.png" alt="">
+        <img src="https://framerusercontent.com/images/H1GmDnNm3DwRgGU6vNctJZUhCxY.png" alt="">
+        <img src="https://framerusercontent.com/images/1D2mXgUWGq8BHyImctAOELpdpSk.png" alt="">
+        <img src="https://framerusercontent.com/images/sh7hziFgolJpLYbxfSvJUdSSsQ.png" alt="">
+        <img src="https://framerusercontent.com/images/nSFhewtfUHCCdby5BAdd10PmU28.png" alt="">
+        <img src="https://framerusercontent.com/images/BPiWhoPxf5mO15szPGo3CL22k.png" alt="" aria-hidden="true">
+        <img src="https://framerusercontent.com/images/U0aByGtvrYuEmCKlDJNeFGfzGsE.png" alt="" aria-hidden="true">
+        <img src="https://framerusercontent.com/images/H1GmDnNm3DwRgGU6vNctJZUhCxY.png" alt="" aria-hidden="true">
+        <img src="https://framerusercontent.com/images/1D2mXgUWGq8BHyImctAOELpdpSk.png" alt="" aria-hidden="true">
+        <img src="https://framerusercontent.com/images/sh7hziFgolJpLYbxfSvJUdSSsQ.png" alt="" aria-hidden="true">
+        <img src="https://framerusercontent.com/images/nSFhewtfUHCCdby5BAdd10PmU28.png" alt="" aria-hidden="true">
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="faq__inner">
+      <h2 class="faq__title">Frequently asked questions</h2>
+      <p class="faq__sub">Everything you need to know about the product and billing.</p>
+      <div class="faq__list">
+        <details class="faq__item"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 1v14M1 8h14"/></svg>Is there a free trial available?</summary>
+          <div class="faq__answer"><p>Yes! Get in touch with our team to discuss your business requirements, and we will set you up with your very own LAAMP environment so you can start building content from day one!</p></div></details>
+        <details class="faq__item"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 1v14M1 8h14"/></svg>What internet speed/bandwidth does LAAMP need to run effectively?</summary>
+          <div class="faq__answer"><p>LAAMP has been optimised to work on low-speed, unreliable networks and has been tested in some of the most remote regions of the world. Video and media streaming quality is dynamically adjusted, depending on the speed of the network.</p><p>Many common functions can be performed while the app is disconnected from the network entirely, with the results being synchronised later when in range. This ensures that audio, video and photo evidence can be captured at remote locations and seamlessly uploaded later.</p></div></details>
+        <details class="faq__item"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 1v14M1 8h14"/></svg>What industries does LAAMP work with?</summary>
+          <div class="faq__answer"><p>LAAMP was created to deliver innovative learning experiences that people truly connect with, regardless of industry. LAAMP focuses on building a learning culture within your organisation to foster a workplace valuing professionalism, training and shared knowledge.</p><p>LAAMP is already deployed across multiple sectors and we work closely with individuals from each industry. We work closely with our customers to ensure we are building a platform that solves and anticipates all current and future learning and training challenges.</p></div></details>
+        <details class="faq__item"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 1v14M1 8h14"/></svg>Can you help us build content to put in LAAMP?</summary>
+          <div class="faq__answer"><p>Absolutely! We have partners in the content creation space that can help you fill out your training requirements with professional, and even tailor-made content.</p></div></details>
+        <details class="faq__item"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 1v14M1 8h14"/></svg>How can LAAMP data be integrated with other systems?</summary>
+          <div class="faq__answer"><p>LAAMP data can be made available to external systems in two formats:</p><p>Scheduled bulk extracts will synchronise large amounts of data. This is a good approach for many analytical scenarios. Data in LAAMP can be exported in a variety of formats, with extracts made available for download using secure time-limited links.</p><p>Real-time events are suitable for informing an external system that the state of a particular records has changed, so that system can take action. Events can be raised when: a user changes, state; when training changes state; or when a competency changes state. These events are passed to an API that you can configure within LAAMP.</p></div></details>
+        <details class="faq__item"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 1v14M1 8h14"/></svg>Is LAAMP SCORM compliant?</summary>
+          <div class="faq__answer"><p>While we don’t recommend SCORM learning, LAAMP is SCORM compliant, and able to deliver SCORM content to users on web and mobile platforms.</p><p>SCORM (Shareable Content Object Reference Model) is outdated technology, dating back to the early 2000’s. Many SCORM courses were built on Adobe Flash which reached end of life on 01/Jan/2021.</p><p>If your organisation is still operating with SCORM frameworks, you may not be taking a modern approach to learning - as a result you are likely restricting outcomes.</p></div></details>
+        <!-- CHANGED: hours aligned with the rest of the page (live text says 8:30 am to 5:30pm (EST)). Confirm with the support team. -->
+        <details class="faq__item"><summary><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 1v14M1 8h14"/></svg>Is support available if we encounter a problem with LAAMP?</summary>
+          <div class="faq__answer"><p>Standard LAAMP support can be accessed via email and telephone, Monday to Friday, 8am to 5pm, Adelaide time. Our LAAMP support team assesses the severity and urgency of the enquiry and offers appropriate assistance. Responses and resolutions can be expected in-line with agreed service level agreements; support services during these standard hours are included in licensing costs.</p><p>Dedicated 24/7 support can also be arranged - we can explore the pricing and service model that best suits your needs.</p></div></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEW START: support section, replaces "We'd love to hear from you" -->
+  <section class="support" id="support" aria-labelledby="support-title">
+    <div class="container">
+      <h2 class="support__title" id="support-title">Need help with LAAMP?</h2>
+      <p class="support__intro">Our support team is available Monday to Friday, 8am to 5pm, Adelaide time.</p>
+      <div class="support__grid">
+        <div class="support__card">
+          <span class="icon-dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg></span>
+          <div>
+            <h3 class="card-title">Send a support request</h3>
+            <p class="card-text">Tell us what’s happening and we’ll get back to you in support hours.</p>
+            <a class="card-link" href="/support">Open the support form</a>
+          </div>
+        </div>
+        <div class="support__card">
+          <span class="icon-dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg></span>
+          <div>
+            <h3 class="card-title">Email support</h3>
+            <p class="card-text">Tell us which device you’re using. LAAMP works on any device, online or offline.</p>
+            <a class="card-link" href="mailto:support@laamp.com.au">support@laamp.com.au</a>
+          </div>
+        </div>
+        <div class="support__card">
+          <span class="icon-dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+          <div>
+            <h3 class="card-title">Call us</h3>
+            <p class="card-text">For sales or support, during business hours.</p>
+            <a class="card-link" href="tel:1300052267">13 000 LAAMP</a>
+          </div>
+        </div>
+      </div>
+      <p class="support__note">Visit our office at Level 4, 30 Currie Street, Adelaide SA 5000.</p>
+    </div>
+  </section>
+  <!-- NEW END -->
+</main>
+
+<footer class="site-footer">
+  <div class="container site-footer__top">
+    <div>
+      <a class="footer-logo" href="/" aria-label="LAAMP home">
+        <svg viewBox="0 0 116 27" fill="currentColor" aria-hidden="true"><path d="M 106.084 0.53 C 112.242 0.53 115.965 4.205 115.965 9.514 L 115.965 9.591 C 115.965 15.605 111.319 18.72 105.53 18.72 L 101.216 18.72 L 101.216 26.517 L 95.538 26.517 L 95.538 0.53 Z M 105.715 13.635 C 108.553 13.635 110.213 11.927 110.213 9.7 L 110.213 9.623 C 110.213 7.061 108.446 5.688 105.603 5.688 L 101.215 5.688 L 101.215 13.635 Z M 69.657 0.53 L 76.441 11.515 L 83.225 0.53 L 89.346 0.53 L 89.346 26.517 L 83.704 26.517 L 83.704 9.551 L 76.44 20.652 L 76.293 20.652 L 69.103 9.662 L 69.103 26.517 L 63.536 26.517 L 63.536 0.53 Z M 20.647 26.551 L 31.711 0.185 L 37.059 0.185 L 48.123 26.551 L 42.222 26.551 L 34.293 7.241 L 26.548 26.551 Z M 44.988 14.482 L 42.037 7.798 L 45.541 0 L 50.634 0 L 61.953 26.551 L 55.868 26.551 L 47.939 7.241 L 44.988 14.482 Z M -0.005 0.371 L 5.895 0.371 L 5.895 21.166 L 18.619 21.166 L 18.619 26.551 L -0.005 26.551 Z"/></svg>
+      </a>
+      <p class="footer-tagline">A modern way to train, induct and assess your people.</p>
+    </div>
+    <ul class="footer-links">
+      <li><a href="/features">Features</a></li>
+      <li><a href="/blog">Blog</a></li>
+      <li><a href="/contact-us">Contact sales</a></li>
+      <!-- NEW: Get support -->
+      <li><a href="/support">Get support</a></li>
+      <li><a href="/pricing">Pricing</a></li>
+      <li><a href="/support/cookies-policy">Cookie Settings</a></li>
+      <li><a href="/support/privacy-policy">Our Policies</a></li>
+    </ul>
+    <!-- Mockup badges. Keep the official App Store and Google Play badges already in Framer. -->
+    <div class="footer-apps">
+      <a class="app-badge" href="https://apps.apple.com/us/app/laamp/id1452121176"><small>Download on the</small><span>App Store</span></a>
+      <a class="app-badge" href="https://play.google.com/store/apps/details?id=au.com.laamp.app"><small>GET IT ON</small><span>Google Play</span></a>
+    </div>
+  </div>
+  <div class="site-footer__bottom">
+    <div class="container">
+      <p class="copyright">© 2017-2026 LAAMP. All rights reserved.</p>
+      <a class="social" href="https://www.linkedin.com/company/laamp/" aria-label="LAAMP on LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var header = document.getElementById('site-header');
+    var toggle = header.querySelector('.menu-toggle');
+    toggle.addEventListener('click', function () {
+      var open = header.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    });
+    document.querySelectorAll('.field select').forEach(function (s) {
+      s.addEventListener('change', function () { s.classList.toggle('has-value', s.value !== ''); });
+    });
+  })();
+</script>
+</body>
+</html>
